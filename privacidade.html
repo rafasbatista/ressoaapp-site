@@ -121,7 +121,8 @@
   <p>Gravações, transcrições, aspas marcadas, marcadores de momento, roteiros de pergunta, documentos lidos e fontes cadastradas. Esse conteúdo é <strong>seu</strong>. Nós o tratamos apenas para fazer o aplicativo funcionar para você.</p>
 
   <h3>Dados de assinatura</h3>
-  <p>Se você assinar o plano Profissional, guardamos o identificador do pagamento no Mercado Pago, o valor, a situação e a data de validade do plano. <strong>Nunca vemos e nunca guardamos o número do seu cartão, o código de segurança ou a sua senha bancária.</strong> Todo o pagamento acontece dentro do ambiente do Mercado Pago.</p>
+  <p>Se você assinar o plano Profissional, guardamos o identificador da transação, o valor, a situação e a data de validade do plano. <strong>Nunca vemos e nunca guardamos o número do seu cartão, o código de segurança ou a sua senha bancária.</strong></p>
+  <p>Quem processa o pagamento depende de onde você assina: dentro do aplicativo é a <strong>App Store</strong> ou a <strong>Google Play</strong>, e pelo site é o <strong>Mercado Pago</strong>, no Pix. Em nenhum dos casos os dados do meio de pagamento passam por nós.</p>
 
   <h3>O que não coletamos</h3>
   <ul>
@@ -205,14 +206,19 @@
           <td data-rotulo="O que recebe">O áudio ou a imagem, no momento do processamento. Servidores nos Estados Unidos.</td>
         </tr>
         <tr>
-          <td data-rotulo="Fornecedor"><strong>Mercado Pago</strong></td>
-          <td data-rotulo="Para quê">Cobrança do Pix e da assinatura no cartão</td>
-          <td data-rotulo="O que recebe">Dados da transação. Os dados do cartão vão direto para eles, sem passar por nós.</td>
+          <td data-rotulo="Fornecedor"><strong>Apple e Google</strong></td>
+          <td data-rotulo="Para quê">Distribuição do aplicativo e cobrança da assinatura feita dentro dele</td>
+          <td data-rotulo="O que recebe">Dados da sua conta na loja e da transação, conforme a política de cada uma.</td>
         </tr>
         <tr>
-          <td data-rotulo="Fornecedor"><strong>Apple e Google</strong></td>
-          <td data-rotulo="Para quê">Distribuição do aplicativo</td>
-          <td data-rotulo="O que recebe">Dados da sua conta na loja, conforme a política de cada uma.</td>
+          <td data-rotulo="Fornecedor"><strong>RevenueCat</strong></td>
+          <td data-rotulo="Para quê">Confirmar com as lojas que a assinatura é válida</td>
+          <td data-rotulo="O que recebe">Seu identificador de conta e a situação da assinatura. Nenhum conteúdo seu.</td>
+        </tr>
+        <tr>
+          <td data-rotulo="Fornecedor"><strong>Mercado Pago</strong></td>
+          <td data-rotulo="Para quê">Cobrança do Pix, quando a assinatura é feita pelo site</td>
+          <td data-rotulo="O que recebe">Dados da transação. Os dados de pagamento vão direto para eles, sem passar por nós.</td>
         </tr>
       </tbody>
     </table>
