@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ressoa — a memória e o radar de accountability do jornalista</title>
+<meta name="description" content="Grave entrevistas, transcreva em português de verdade e receba aspas verificáveis, com prova em áudio de cada palavra. Pergunte às suas entrevistas e nunca mais perca uma promessa. Feito de jornalista para jornalista." />
+<meta property="og:title" content="Ressoa — da entrevista à aspa pronta, com prova de cada palavra" />
+<meta property="og:description" content="O app do jornalista brasileiro: grava, transcreve em PT-BR, marca aspas verificáveis com o áudio no segundo exato e deixa você perguntar às suas entrevistas." />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#0C0D12" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='14' cy='24' r='4.5' fill='%237C5CFF'/%3E%3Cpath d='M23 15a12 12 0 0 1 0 18' stroke='%237C5CFF' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpath d='M29 9a20 20 0 0 1 0 30' stroke='%237C5CFF' stroke-width='3' fill='none' stroke-linecap='round' opacity='.55'/%3E%3Cpath d='M35 4a27 27 0 0 1 0 40' stroke='%237C5CFF' stroke-width='3' fill='none' stroke-linecap='round' opacity='.25'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0C0D12;
+    --bg-2: #0f1017;
+    --surface: #15161E;
+    --surface-2: #1b1d28;
+    --border: #23252F;
+    --violet: #7C5CFF;
+    --violet-soft: rgba(124, 92, 255, 0.12);
+    --violet-line: rgba(124, 92, 255, 0.28);
+    --green: #4ADE9E;
+    --rec: #FF5470;
+    --text: #F2F3F7;
+    --text-2: #A5A8B5;
+    --muted: #6E7180;
+    --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+    --sans: "Inter", "Segoe UI", system-ui, sans-serif;
+    --mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --maxw: 1120px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  canvas#resonance {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+  /* ---------- Type ---------- */
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; margin: 0; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--violet);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 22px; height: 1px; background: var(--violet-line); }
+  .lead { color: var(--text-2); font-size: clamp(16px, 2.1vw, 19px); max-width: 60ch; }
+  .grad { color: var(--violet); }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s;
+  }
+  nav.scrolled { border-bottom-color: var(--border); }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 11px; font-family: var(--display); font-weight: 700; font-size: 21px; }
+  .brand .r { color: var(--violet); }
+  .eco { width: 30px; height: 30px; color: var(--violet); flex: none; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a { color: var(--text-2); font-size: 14.5px; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--text); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+    font-family: var(--sans); font-weight: 600; font-size: 15px;
+    padding: 12px 22px; border-radius: 12px; border: 1px solid transparent; cursor: pointer;
+    transition: transform .15s ease, background .2s, border-color .2s;
+  }
+  .btn-primary { background: var(--violet); color: #0b0b12; box-shadow: 0 8px 30px -8px rgba(124,92,255,.6); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost { border-color: var(--border); color: var(--text); background: rgba(255,255,255,.02); }
+  .btn-ghost:hover { border-color: var(--violet-line); }
+  .nav-links .btn { padding: 10px 18px; }
+  @media (max-width: 780px) { .nav-links a:not(.btn) { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 84px 0 40px; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+  .hero h1 { font-size: clamp(38px, 6.4vw, 72px); line-height: 1.02; }
+  .hero .lead { margin-top: 24px; }
+  .hero-cta { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
+  .hero-meta { display: flex; gap: 22px; margin-top: 30px; flex-wrap: wrap; color: var(--muted); font-size: 13.5px; }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 8px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
+  .dot.v { background: var(--violet); box-shadow: 0 0 10px var(--violet); }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } .hero { padding-top: 54px; } }
+
+  /* ---------- Phone mockup ---------- */
+  .stage { perspective: 1600px; display: flex; justify-content: center; }
+  .phone {
+    width: 300px; flex: none;
+    border-radius: 42px;
+    background: linear-gradient(160deg, #202230, #101119);
+    padding: 10px;
+    border: 1px solid #2a2c3a;
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.85), 0 0 0 1px rgba(124,92,255,.06), inset 0 1px 0 rgba(255,255,255,.05);
+    transform: rotateY(-16deg) rotateX(6deg) rotateZ(1deg);
+    transition: transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .phone.flat { transform: rotateY(0) rotateX(0); }
+  .stage.right .phone { transform: rotateY(16deg) rotateX(6deg) rotateZ(-1deg); }
+  .stage.right .phone.flat { transform: rotateY(0) rotateX(0); }
+  .screen {
+    border-radius: 34px; background: var(--bg); overflow: hidden; height: 600px;
+    border: 1px solid #000; position: relative; display: flex; flex-direction: column;
+  }
+  .notch { height: 26px; display: flex; align-items: center; justify-content: center; }
+  .notch::after { content: ""; width: 90px; height: 6px; border-radius: 6px; background: #000; }
+  .scr-pad { padding: 6px 16px 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; overflow: hidden; }
+  .scr-head { display: flex; align-items: center; justify-content: space-between; }
+  .scr-title { font-family: var(--display); font-weight: 700; font-size: 20px; }
+  .beta { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; color: var(--violet); border: 1px solid var(--violet-line); border-radius: 20px; padding: 3px 8px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px;
+  }
+  .card.hl { background: var(--violet-soft); border-color: var(--violet-line); }
+  .chip { font-size: 11px; font-weight: 600; padding: 5px 11px; border-radius: 20px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2); display: inline-block; }
+  .chip.on { background: var(--violet); color: #0b0b12; border-color: transparent; }
+  .chip.ok { background: rgba(74,222,158,.14); color: var(--green); border-color: rgba(74,222,158,.3); }
+  .chip.rec { background: rgba(255,84,112,.14); color: var(--rec); border-color: rgba(255,84,112,.3); }
+  .rowchips { display: flex; gap: 7px; }
+  .ts { font-family: var(--mono); font-size: 11px; color: var(--violet); display: inline-flex; align-items: center; gap: 4px; }
+  .muted-s { color: var(--muted); font-size: 12px; }
+  .txt-s { font-size: 12.5px; color: var(--text-2); line-height: 1.45; }
+  .txt-b { font-size: 13px; font-weight: 600; }
+
+  /* waveform */
+  .wave { display: flex; align-items: center; gap: 3px; height: 34px; }
+  .wave i { width: 3px; border-radius: 3px; background: #3a3d4d; }
+  .wave i.a { background: var(--violet); }
+  .rec-btn { width: 74px; height: 74px; border-radius: 50%; background: var(--rec); margin: 6px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px -6px rgba(255,84,112,.6); }
+  .rec-btn.v { background: var(--violet); box-shadow: 0 0 40px -6px rgba(124,92,255,.6); }
+  .rec-btn::after { content: ""; width: 24px; height: 24px; border-radius: 6px; background: #0b0b12; }
+  .rec-btn.mic::after { width: 0; height: 0; }
+  .play { width: 28px; height: 28px; border-radius: 50%; background: var(--violet); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .play::after { content: ""; border-left: 9px solid #0b0b12; border-top: 6px solid transparent; border-bottom: 6px solid transparent; margin-left: 2px; }
+
+  /* tab bar */
+  .tabbar { margin-top: auto; display: flex; align-items: center; justify-content: space-around; padding: 10px 6px 4px; border-top: 1px solid var(--border); }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9px; color: var(--muted); }
+  .tab .ic { width: 18px; height: 18px; border: 1.6px solid var(--muted); border-radius: 5px; }
+  .tab.on { color: var(--violet); }
+  .tab.on .ic { border-color: var(--violet); }
+  .tab.fab .ic { width: 46px; height: 46px; border-radius: 50%; background: var(--violet); border: 3px solid var(--bg); margin-top: -22px; box-shadow: 0 0 20px -4px var(--violet); }
+
+  /* ---------- Sections ---------- */
+  section { position: relative; padding: 86px 0; }
+  .section-head { max-width: 720px; }
+  .section-head h2 { font-size: clamp(28px, 4.4vw, 46px); line-height: 1.06; margin-top: 18px; }
+  .section-head .lead { margin-top: 18px; }
+
+  .thesis { text-align: center; padding: 70px 0; }
+  .thesis .big { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 4.6vw, 50px); line-height: 1.12; letter-spacing: -0.02em; max-width: 18ch; margin: 0 auto; }
+  .thesis .big b { color: var(--violet); }
+  .thesis .sub { color: var(--text-2); margin-top: 22px; max-width: 58ch; margin-left: auto; margin-right: auto; }
+
+  .feat { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .feat.rev { direction: rtl; }
+  .feat.rev > * { direction: ltr; }
+  .feat .copy h2 { font-size: clamp(26px, 3.8vw, 40px); line-height: 1.08; margin-top: 16px; }
+  .feat .copy p { color: var(--text-2); margin-top: 18px; font-size: 16.5px; }
+  .feat ul { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-direction: column; gap: 12px; }
+  .feat li { display: flex; gap: 11px; align-items: flex-start; color: var(--text-2); font-size: 15px; }
+  .feat li::before { content: ""; width: 18px; height: 18px; flex: none; margin-top: 2px; border-radius: 50%; background: var(--violet-soft); border: 1px solid var(--violet-line); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237C5CFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); background-size: 12px; background-repeat: no-repeat; background-position: center; }
+  @media (max-width: 900px) {
+    .feat { grid-template-columns: 1fr; gap: 40px; }
+    .feat.rev { direction: ltr; }
+    section { padding: 64px 0; }
+  }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: .08s; } .reveal.d2 { transition-delay: .16s; } .reveal.d3 { transition-delay: .24s; }
+
+  /* grid of small features */
+  .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px; }
+  .mini { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 22px; transition: border-color .25s, transform .25s; }
+  .mini:hover { border-color: var(--violet-line); transform: translateY(-3px); }
+  .mini .mi { width: 40px; height: 40px; border-radius: 11px; background: var(--violet-soft); display: flex; align-items: center; justify-content: center; color: var(--violet); margin-bottom: 14px; }
+  .mini h3 { font-size: 17px; }
+  .mini p { color: var(--text-2); font-size: 14px; margin: 8px 0 0; }
+  @media (max-width: 860px) { .mini-grid { grid-template-columns: 1fr; } }
+
+  /* em breve */
+  .soon { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(124,92,255,.05), transparent 60%); }
+  .soon-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 40px; }
+  .soon-card { display: flex; gap: 15px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; }
+  .soon-card .si { width: 38px; height: 38px; border-radius: 10px; background: var(--violet-soft); color: var(--violet); display: flex; align-items: center; justify-content: center; flex: none; }
+  .soon-card h3 { font-size: 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .soon-card .tag { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--violet); border: 1px solid var(--violet-line); border-radius: 20px; padding: 2px 7px; }
+  .soon-card p { color: var(--text-2); font-size: 13.5px; margin: 7px 0 0; }
+  @media (max-width: 760px) { .soon-grid { grid-template-columns: 1fr; } }
+
+  /* pricing */
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 44px; }
+  .plan { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 30px; display: flex; flex-direction: column; }
+  .plan.pro { border-color: var(--violet-line); background: linear-gradient(180deg, var(--violet-soft), var(--surface) 70%); position: relative; }
+  .plan .pname { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-2); }
+  .plan .price { font-family: var(--display); font-weight: 700; font-size: 46px; margin: 14px 0 2px; letter-spacing: -0.03em; }
+  .plan .price small { font-size: 15px; color: var(--muted); font-family: var(--sans); font-weight: 500; }
+  .plan .note { color: var(--green); font-size: 13.5px; font-weight: 600; min-height: 20px; }
+  .plan ul { list-style: none; padding: 0; margin: 22px 0 26px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .plan li { display: flex; gap: 10px; color: var(--text-2); font-size: 14.5px; }
+  .plan li::before { content: ""; width: 16px; height: 16px; flex: none; margin-top: 3px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237C5CFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); background-size: contain; background-repeat: no-repeat; }
+  .badge { position: absolute; top: -12px; right: 24px; background: var(--violet); color: #0b0b12; font-size: 12px; font-weight: 700; padding: 5px 13px; border-radius: 20px; }
+  @media (max-width: 760px) { .price-grid { grid-template-columns: 1fr; } }
+
+  /* manifesto */
+  .manifesto { text-align: center; }
+  .manifesto .m { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 4.4vw, 46px); letter-spacing: -0.02em; line-height: 1.12; max-width: 20ch; margin: 0 auto; }
+  .manifesto .m b { color: var(--violet); }
+  .seal { display: inline-flex; align-items: center; gap: 9px; margin-top: 26px; padding: 9px 18px; border-radius: 30px; border: 1px solid rgba(74,222,158,.3); background: rgba(74,222,158,.08); color: var(--green); font-weight: 600; font-size: 14px; }
+
+  /* final cta */
+  .final { text-align: center; padding: 96px 0; }
+  .final h2 { font-size: clamp(30px, 5vw, 56px); line-height: 1.04; }
+  .final .lead { margin: 20px auto 0; }
+  .final .hero-cta { justify-content: center; }
+
+  /* footer */
+  footer { border-top: 1px solid var(--border); padding: 40px 0; color: var(--muted); font-size: 13.5px; }
+  .foot-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  footer a { color: var(--text-2); }
+  footer a:hover { color: var(--violet); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .phone { transition: none; }
+    canvas#resonance { display: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="resonance" aria-hidden="true"></canvas>
+
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Ressoa, início">
+      <svg class="eco" viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="24" r="4.5" fill="currentColor"/><path d="M23 15a12 12 0 0 1 0 18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M29 9a20 20 0 0 1 0 30" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/><path d="M35 4a27 27 0 0 1 0 40" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".25"/></svg>
+      <span><span class="r">R</span>essoa</span>
+    </a>
+    <div class="nav-links">
+      <a href="#recursos">Recursos</a>
+      <a href="#pergunte">Pergunte</a>
+      <a href="#embreve">Em breve</a>
+      <a href="#precos">Preços</a>
+      <a class="btn btn-primary" href="#precos">Começar grátis</a>
+    </div>
+  </div>
+</nav>
+
+<a id="top"></a>
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="eyebrow">O app do jornalista brasileiro</span>
+      <h1>Da entrevista à aspa pronta, <span class="grad">com prova de cada palavra.</span></h1>
+      <p class="lead">Grave, transcreva em português de verdade e receba as melhores falas da sua fonte, com o áudio no segundo exato de cada aspa. E ainda pergunte às suas próprias entrevistas, como um Google particular da sua apuração.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#precos">Começar grátis</a>
+        <a class="btn btn-ghost" href="#pergunte">Ver como funciona</a>
+      </div>
+      <div class="hero-meta">
+        <span><i class="dot"></i> Transcrição em PT-BR</span>
+        <span><i class="dot v"></i> Aspas verificáveis</span>
+        <span><i class="dot"></i> Zero texto gerado por IA</span>
+      </div>
+    </div>
+
+    <div class="stage right reveal in d1">
+      <div class="phone" data-tilt>
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="scr-pad">
+            <div class="scr-head"><div class="brand" style="font-size:17px"><svg class="eco" style="width:22px;height:22px" viewBox="0 0 48 48"><circle cx="14" cy="24" r="4.5" fill="currentColor"/><path d="M23 15a12 12 0 0 1 0 18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M29 9a20 20 0 0 1 0 30" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/></svg><span><span class="r">R</span>essoa</span></div><span class="beta">beta</span></div>
+            <div class="rowchips" style="justify-content:center"><span class="chip on">Entrevista</span><span class="chip">Ligação</span><span class="chip">Coletiva</span></div>
+            <div class="card hl">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="ts" style="color:var(--rec)"><i class="dot" style="background:var(--rec);box-shadow:0 0 8px var(--rec)"></i> REC 00:04:12</span><span class="muted-s">Entrevista · hoje</span></div>
+              <div class="wave" id="wave-hero"></div>
+            </div>
+            <div class="rec-btn mic" style="background:var(--violet);box-shadow:0 0 40px -6px rgba(124,92,255,.6)"><svg width="30" height="30" viewBox="0 0 24 24" fill="#0b0b12"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 12a7 7 0 0 1-14 0M12 19v3" stroke="#0b0b12" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+            <div style="text-align:center" class="txt-b">Gravando…</div>
+            <div class="card" style="padding:11px 13px"><div class="txt-b" style="margin-bottom:6px;font-size:12px">Roteiro da entrevista</div><div class="txt-s" style="display:flex;gap:8px;align-items:center"><span style="width:15px;height:15px;border-radius:4px;border:1.5px solid var(--green);background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%234ADE9E%22 stroke-width=%223%22 stroke-linecap=%22round%22%3E%3Cpolyline points=%2220 6 9 17 4 12%22/%3E%3C/svg%3E');background-size:10px;background-repeat:no-repeat;background-position:center"></span> Previsão de entrega da obra</div></div>
+            <div class="tabbar">
+              <div class="tab"><span class="ic"></span>Gravações</div>
+              <div class="tab"><span class="ic"></span>Escrever</div>
+              <div class="tab on fab"><span class="ic"></span>Ressoar</div>
+              <div class="tab"><span class="ic"></span>Docs</div>
+              <div class="tab"><span class="ic"></span>Perfil</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="thesis">
+  <div class="wrap reveal">
+    <p class="big">Transcrever virou de graça. <b>Apurar com prova, não.</b></p>
+    <p class="sub">Qualquer app transcreve. O Ressoa faz o que importa para o jornalista: guarda a prova em áudio de cada aspa, cruza o que suas fontes disseram e não deixa você perder o fio da apuração. A IA aqui é um arquivista implacável, nunca um ghost-writer.</p>
+  </div>
+</section>
+
+<section id="recursos">
+  <div class="wrap feat">
+    <div class="copy reveal">
+      <span class="eyebrow">Aspas verificáveis</span>
+      <h2>Ninguém tira você de contexto.</h2>
+      <p>Marque a fala da fonte com um toque e ela vira uma aspa com o player no segundo exato. Copie a citação pronta, com o falante, e tenha a prova em áudio sempre à mão, para a matéria, para o editor, para o jurídico.</p>
+      <ul>
+        <li>Player no segundo exato de cada citação</li>
+        <li>Sugestão de aspas por IA, que só seleciona falas reais</li>
+        <li>Copie a aspa formatada em um toque</li>
+      </ul>
+    </div>
+    <div class="stage reveal d1">
+      <div class="phone" data-tilt>
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="scr-pad">
+            <div class="scr-head"><div class="scr-title">Aspas</div><span class="chip ok">3</span></div>
+            <div class="card hl">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px"><span class="chip on" style="font-size:10px">Fonte 1</span><span class="ts"><span style="width:7px;height:7px;border-left:6px solid var(--violet);border-top:4px solid transparent;border-bottom:4px solid transparent"></span> 00:18</span></div>
+              <div class="txt-s" style="color:var(--text)">"A obra será entregue ainda neste semestre, com recursos já empenhados pelo governo do estado."</div>
+              <div class="wave" style="margin-top:11px" id="wave-quote"></div>
+              <div class="rowchips" style="margin-top:11px"><span class="chip" style="flex:1;text-align:center">Copiar aspa</span><span class="chip" style="flex:1;text-align:center">Ouvir</span></div>
+            </div>
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="rowchips"><span class="chip">Repórter</span></div><span class="ts">00:06</span></div>
+              <div class="txt-s">Secretário, qual é a previsão de entrega da obra do viaduto?</div>
+            </div>
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="rowchips"><span class="chip">Fonte 1</span><span class="chip rec" style="font-size:10px">revisar</span></div><span class="ts">00:36</span></div>
+              <div class="txt-s">As desapropriações estão em fase final. Restam três imóveis…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat rev">
+    <div class="copy reveal">
+      <span class="eyebrow">Revisão assistida</span>
+      <h2>A IA sugere, você decide. E ela nunca inventa uma palavra.</h2>
+      <p>Nas transcrições em português espontâneo, com sotaque, a máquina erra. O Ressoa marca os trechos de baixa confiança e sugere a correção mais provável, com o áudio ao lado. Sem hipótese confiável? Vira [inaudível]. Nada é aplicado sem o seu aceite.</p>
+      <ul>
+        <li>Correções só com o seu "sim"</li>
+        <li>Nunca inventa palavra, sem hipótese vira [inaudível]</li>
+        <li>O texto original é sempre preservado</li>
+      </ul>
+    </div>
+    <div class="stage right reveal d1">
+      <div class="phone" data-tilt>
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="scr-pad">
+            <div class="scr-head"><div class="scr-title">Revisão assistida</div><span class="chip">2 pendentes</span></div>
+            <div class="card hl">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px"><span class="chip on" style="font-size:10px">baixa confiança</span><span class="ts">ouvir trecho</span></div>
+              <div class="txt-s">"…com recursos já <span style="color:var(--muted);text-decoration:line-through">empanados</span> pelo governo"</div>
+              <div style="margin:12px 0" class="txt-b"><span style="color:var(--muted);text-decoration:line-through">empanados</span> &nbsp;→&nbsp; <span style="color:var(--violet)">empenhados</span> <span class="muted-s">(92%)</span></div>
+              <div class="rowchips"><span class="chip on" style="flex:1;text-align:center">Aceitar</span><span class="chip" style="flex:1;text-align:center">Rejeitar</span></div>
+            </div>
+            <div class="card hl">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px"><span class="chip on" style="font-size:10px">inaudível</span><span class="ts">ouvir trecho</span></div>
+              <div class="txt-s">"e o [inaudível] já foi notificado"</div>
+              <div class="muted-s" style="margin-top:8px">Sem hipótese confiável, o trecho fica marcado para você conferir no áudio.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pergunte">
+  <div class="wrap feat">
+    <div class="copy reveal">
+      <span class="eyebrow">Pergunte às suas entrevistas &middot; novo</span>
+      <h2>Um Google particular da sua apuração.</h2>
+      <p>Você acumula dezenas de horas gravadas e nunca mais acha nada. Aqui você pergunta em português, do jeito que pensa, e o Ressoa acha a resposta em todas as suas entrevistas, com o áudio no ponto exato, mesmo que você não lembre as palavras que a fonte usou.</p>
+      <ul>
+        <li>Busca por sentido, não por palavra exata</li>
+        <li>Toque e o áudio abre no segundo certo</li>
+        <li>Cruza todas as suas gravações de uma vez</li>
+      </ul>
+    </div>
+    <div class="stage right reveal d1">
+      <div class="phone" data-tilt>
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="scr-pad">
+            <div class="scr-title" style="font-size:18px">Pergunte às suas entrevistas</div>
+            <div class="card" style="display:flex;align-items:center;gap:9px;padding:12px 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3" stroke-linecap="round"/></svg><span class="txt-s">quando o hospital fica pronto?</span></div>
+            <a class="card" style="display:block">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><span class="txt-b" style="color:var(--violet)">Entrevista Secretário de Saúde</span><span class="ts">90% · 00:40</span></div>
+              <div class="txt-s">"…o novo hospital abre no primeiro semestre, com as UTIs entregues até março."</div>
+            </a>
+            <a class="card" style="display:block">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><span class="txt-b" style="color:var(--violet)">Coletiva da Prefeitura</span><span class="ts">83% · 12:07</span></div>
+              <div class="txt-s">"As obras de saúde do setor estão na fase final de execução."</div>
+            </a>
+            <div class="muted-s" style="text-align:center;margin-top:2px">Busca no seu acervo, com o áudio no ponto exato.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap feat rev">
+    <div class="copy reveal">
+      <span class="eyebrow">Documentos com leitura</span>
+      <h2>Fotografe o ofício. O Ressoa extrai o que importa.</h2>
+      <p>Tire uma foto de um ofício, nota oficial ou planilha. O app transcreve o texto, destaca os dados-chave, datas, valores, prazos, números de processo, e deixa você marcar trechos como citação. Extrai e organiza, nunca escreve a matéria por você.</p>
+      <ul>
+        <li>Dados-chave destacados automaticamente</li>
+        <li>Trechos viram citação verbatim</li>
+        <li>Tudo pesquisável junto das suas entrevistas</li>
+      </ul>
+    </div>
+    <div class="stage reveal d1">
+      <div class="phone" data-tilt>
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="scr-pad">
+            <div class="scr-title" style="font-size:18px">Documento 23/07</div>
+            <div class="card txt-s" style="line-height:1.5">PREFEITURA MUNICIPAL<br>OFÍCIO Nº 245/2026<br><br>A obra do viaduto será entregue até 30/09/2026, com investimento de R$ 12,4 milhões…</div>
+            <div class="txt-b" style="font-size:12px;margin-top:2px">Dados-chave</div>
+            <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:11px 13px"><div style="display:flex;gap:9px;align-items:center"><span class="chip">Prazo</span><span class="txt-b" style="font-size:12px">30/09/2026</span></div><span style="color:var(--violet)">✦</span></div>
+            <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:11px 13px"><div style="display:flex;gap:9px;align-items:center"><span class="chip">Valor</span><span class="txt-b" style="font-size:12px">R$ 12,4 mi</span></div><span style="color:var(--violet)">✦</span></div>
+            <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:11px 13px"><div style="display:flex;gap:9px;align-items:center"><span class="chip">Processo</span><span class="txt-b" style="font-size:12px">2026001234…</span></div><span style="color:var(--violet)">✦</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">E ainda</span>
+      <h2>Tudo que a apuração precisa, num lugar só.</h2>
+      <p class="lead">O Ressoa é o cockpit do repórter, do momento da entrevista à hora de escrever.</p>
+    </div>
+    <div class="mini-grid">
+      <div class="mini reveal">
+        <div class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v6m0 0a3 3 0 0 0 3-3V4a3 3 0 0 0-6 0v0a3 3 0 0 0 3 3z" /><path d="M5 10a7 7 0 0 0 14 0" stroke-linecap="round"/></svg></div>
+        <h3>Gravador completo</h3>
+        <p>Entrevista, ligação em viva-voz e coletiva. Marque momentos ao vivo e pause sem perder nada.</p>
+      </div>
+      <div class="mini reveal d1">
+        <div class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7" stroke-linecap="round"/></svg></div>
+        <h3>Roteiro ao vivo</h3>
+        <p>Escreva as perguntas antes e vá ticando durante a entrevista para não se perder.</p>
+      </div>
+      <div class="mini reveal d2">
+        <div class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7 9 18l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Memória de fontes</h3>
+        <p>Sua agenda de contatos, cargos e anotações, ligada às falas de cada fonte.</p>
+      </div>
+      <div class="mini reveal">
+        <div class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" /><path d="M8 9h8M8 13h5" stroke-linecap="round"/></svg></div>
+        <h3>Bloco de escrita</h3>
+        <p>Escreva a matéria do zero e insira as aspas da transcrição. O texto é sempre seu.</p>
+      </div>
+      <div class="mini reveal d1">
+        <div class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke-linecap="round"/></svg></div>
+        <h3>Exportar para a redação</h3>
+        <p>Transcrição e aspas em .txt e Word, formatadas, ou copiadas limpas em um toque.</p>
+      </div>
+      <div class="mini reveal d2">
+        <div class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linejoin="round"/></svg></div>
+        <h3>Seus dados, seus</h3>
+        <p>Conta protegida, áudio no seu aparelho por padrão e sincronização do texto na nuvem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="embreve" class="soon">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Em breve</span>
+      <h2>O que vem por aí é ainda mais surreal.</h2>
+      <p class="lead">Estamos construindo a memória e o radar de accountability do jornalista. Um lançamento por vez.</p>
+    </div>
+    <div class="soon-grid">
+      <div class="soon-card reveal">
+        <div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3 21 9M9 21 3 15M17 7 7 17" stroke-linecap="round"/></svg></div>
+        <div><h3>Detector de contradição <span class="tag">accountability</span></h3><p>Avisa quando uma fonte se contradiz com algo que ela mesma disse antes. Máquina de furo.</p></div>
+      </div>
+      <div class="soon-card reveal d1">
+        <div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg></div>
+        <div><h3>Rastreador de promessas <span class="tag">cobrança</span></h3><p>Guarda toda promessa e prazo que uma autoridade dá e te lembra de cobrar quando vence.</p></div>
+      </div>
+      <div class="soon-card reveal">
+        <div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke-linecap="round"/></svg></div>
+        <div><h3>Quem falou o quê <span class="tag">diarização</span></h3><p>A entrevista já sai separada por voz: Repórter, Fonte 1, Fonte 2, automaticamente.</p></div>
+      </div>
+      <div class="soon-card reveal d1">
+        <div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" stroke-linejoin="round"/></svg></div>
+        <div><h3>Copiloto ao vivo <span class="tag">na entrevista</span></h3><p>Durante a conversa: detecta a evasiva, puxa uma fala passada da fonte e sugere a próxima pergunta.</p></div>
+      </div>
+      <div class="soon-card reveal">
+        <div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h3>A aspa que vira prova <span class="tag">defesa</span></h3><p>Um pacote com o áudio no ponto exato e a transcrição, para anexar quando disserem "fui tirado de contexto".</p></div>
+      </div>
+      <div class="soon-card reveal d1">
+        <div class="si"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20" /></svg></div>
+        <div><h3>Tradução de entrevista <span class="tag">internacional</span></h3><p>Áudio em espanhol ou inglês vira transcrição e aspas em português do Brasil.</p></div>
+      </div>
+    </div>
+    <p class="muted-s reveal" style="text-align:center;margin-top:28px">No app, você diz em quais recursos tem interesse, e os mais pedidos entram primeiro.</p>
+  </div>
+</section>
+
+<section id="precos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Preços</span>
+      <h2>Comece de graça. Vire Profissional quando quiser.</h2>
+      <p class="lead">Menos que um café por semana por uma ferramenta que ninguém junta em português, para jornalista.</p>
+    </div>
+    <div class="price-grid">
+      <div class="plan reveal">
+        <div class="pname">Repórter</div>
+        <div class="price">Grátis</div>
+        <div class="note">&nbsp;</div>
+        <ul>
+          <li>60 minutos de transcrição por mês</li>
+          <li>Gravador completo e roteiro ao vivo</li>
+          <li>Aspas verificáveis e revisão assistida</li>
+          <li>Documentos, fontes e exportar</li>
+          <li>O áudio fica no seu aparelho</li>
+        </ul>
+        <a class="btn btn-ghost" href="#top">Começar grátis</a>
+      </div>
+      <div class="plan pro reveal d1">
+        <span class="badge">3 dias grátis</span>
+        <div class="pname" style="color:var(--violet)">Profissional</div>
+        <div class="price">R$ 39<small> /mês</small></div>
+        <div class="note">ou R$ 390/ano, com 2 meses grátis</div>
+        <ul>
+          <li>Transcrição ilimitada</li>
+          <li>Pergunte às suas entrevistas, sem limite</li>
+          <li>Backup dos áudios na nuvem</li>
+          <li>Sugestão de aspas e revisão à vontade</li>
+          <li>Prioridade nas novidades que vêm por aí</li>
+        </ul>
+        <a class="btn btn-primary" href="#top">Assinar o Profissional</a>
+      </div>
+    </div>
+    <p class="muted-s reveal" style="text-align:center;margin-top:22px">Pagamento no Pix ou cartão, via Mercado Pago. Cancele quando quiser.</p>
+  </div>
+</section>
+
+<section class="manifesto">
+  <div class="wrap reveal">
+    <p class="m">Aqui, quem escreve é <b>você</b>.</p>
+    <div class="seal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg> Zero texto gerado por IA</div>
+    <p class="sub" style="margin-top:26px">A tecnologia cuida do trabalho pesado, gravar, transcrever, organizar e achar a aspa. O texto, o ângulo e a assinatura continuam seus.</p>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap reveal">
+    <span class="eyebrow" style="justify-content:center">Feito de jornalista para jornalista</span>
+    <h2 style="margin-top:18px">Sua próxima entrevista <span class="grad">merece o Ressoa.</span></h2>
+    <p class="lead">Grave a primeira hoje e receba a transcrição em português, com a aspa pronta e a prova em áudio.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#precos">Começar grátis</a>
+      <a class="btn btn-ghost" href="#recursos">Ver os recursos</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div style="display:flex;align-items:center;gap:11px">
+      <svg class="eco" viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="24" r="4.5" fill="currentColor"/><path d="M23 15a12 12 0 0 1 0 18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M29 9a20 20 0 0 1 0 30" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/></svg>
+      <span>Ressoa, um app independente de Rafael Batista, jornalista goiano.</span>
+    </div>
+    <div style="display:flex;gap:22px;align-items:center">
+      <a href="mailto:ressoaapp@rafasbatista.com.br">Contato</a>
+      <a href="#precos">Preços</a>
+      <span>© 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* nav shadow on scroll */
+  var nav = document.getElementById('nav');
+  var onScroll = function () { nav.classList.toggle('scrolled', window.scrollY > 12); };
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* build waveforms */
+  function wave(el, active) {
+    if (!el) return;
+    var n = 40;
+    for (var i = 0; i < n; i++) {
+      var b = document.createElement('i');
+      var h = 6 + Math.abs(Math.sin(i * 0.7)) * 26 + (Math.random() * 6);
+      b.style.height = h.toFixed(0) + 'px';
+      if (active && (i % 5 === 0 || i % 7 === 0)) b.classList.add('a');
+      el.appendChild(b);
+    }
+  }
+  wave(document.getElementById('wave-hero'), true);
+  wave(document.getElementById('wave-quote'), true);
+
+  /* reveal on scroll */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.16 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  /* phones go flat when in view */
+  var pio = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('flat'); });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.phone').forEach(function (el) { if (!reduce) pio.observe(el); else el.classList.add('flat'); });
+
+  /* subtle mouse tilt on desktop */
+  if (!reduce && window.matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('[data-tilt]').forEach(function (el) {
+      var stage = el.closest('.stage');
+      el.addEventListener('mousemove', function (ev) {
+        var r = el.getBoundingClientRect();
+        var x = (ev.clientX - r.left) / r.width - 0.5;
+        var y = (ev.clientY - r.top) / r.height - 0.5;
+        el.style.transform = 'rotateY(' + (x * 12) + 'deg) rotateX(' + (-y * 12) + 'deg)';
+      });
+      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+    });
+  }
+
+  /* resonance canvas: expanding echo rings + faint waveform */
+  if (!reduce) {
+    var cv = document.getElementById('resonance');
+    var ctx = cv.getContext('2d');
+    var W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    function resize() { W = cv.width = innerWidth * DPR; H = cv.height = innerHeight * DPR; }
+    resize(); window.addEventListener('resize', resize);
+    var rings = [];
+    var cx = function () { return W * 0.78; }, cy = function () { return H * 0.28; };
+    var last = 0;
+    function loop(t) {
+      ctx.clearRect(0, 0, W, H);
+      if (t - last > 1400) { rings.push({ r: 0, a: 0.5 }); last = t; }
+      for (var i = rings.length - 1; i >= 0; i--) {
+        var g = rings[i];
+        g.r += 0.7 * DPR; g.a -= 0.0016;
+        if (g.a <= 0) { rings.splice(i, 1); continue; }
+        ctx.beginPath();
+        ctx.arc(cx(), cy(), g.r, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(124,92,255,' + g.a.toFixed(3) + ')';
+        ctx.lineWidth = 1.2 * DPR;
+        ctx.stroke();
+      }
+      /* faint bottom waveform */
+      ctx.beginPath();
+      var yBase = H * 0.9;
+      for (var x = 0; x <= W; x += 6 * DPR) {
+        var yy = yBase + Math.sin(x * 0.006 + t * 0.0009) * 10 * DPR * Math.sin(x * 0.0009);
+        x === 0 ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy);
+      }
+      ctx.strokeStyle = 'rgba(124,92,255,0.08)';
+      ctx.lineWidth = 1.4 * DPR;
+      ctx.stroke();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  }
+})();
+</script>
+</body>
+</html>
