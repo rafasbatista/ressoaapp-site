@@ -125,6 +125,7 @@
   .hero-cta { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
   /* Botões das lojas (em breve) */
   .stores { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .stores.center { justify-content: center; }
   .store {
     display: inline-flex; align-items: center; gap: 11px;
     padding: 9px 17px; border-radius: 12px;
@@ -268,7 +269,7 @@
   .plan .price { font-family: var(--display); font-weight: 700; font-size: 46px; margin: 14px 0 2px; letter-spacing: -0.03em; }
   .plan .price small { font-size: 15px; color: var(--muted); font-family: var(--sans); font-weight: 500; }
   .plan .note { color: var(--green); font-size: 13.5px; font-weight: 600; min-height: 20px; }
-  .plan ul { list-style: none; padding: 0; margin: 22px 0 26px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .plan ul { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-direction: column; gap: 12px; flex: 1; }
   .plan li { display: flex; gap: 10px; color: var(--text-2); font-size: 14.5px; }
   .plan li::before { content: ""; width: 16px; height: 16px; flex: none; margin-top: 3px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237C5CFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E"); background-size: contain; background-repeat: no-repeat; }
   .badge { position: absolute; top: -12px; right: 24px; background: var(--violet); color: #0b0b12; font-size: 12px; font-weight: 700; padding: 5px 13px; border-radius: 20px; }
@@ -286,6 +287,20 @@
   .final .lead { margin: 20px auto 0; }
   .final .hero-cta { justify-content: center; }
 
+  /* box do Instagram: a única coisa que dá pra fazer hoje, enquanto o app
+     não chega às lojas, é seguir. Por isso vem logo depois do bloco de baixar. */
+  .ig-box {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    background: linear-gradient(180deg, var(--violet-soft), var(--surface) 72%);
+    border: 1px solid var(--violet-line); border-radius: 22px; padding: 28px 30px;
+  }
+  .ig-mark { width: 54px; height: 54px; border-radius: 16px; background: var(--violet-soft); border: 1px solid var(--violet-line); color: var(--violet); display: flex; align-items: center; justify-content: center; flex: none; }
+  .ig-mark svg { width: 27px; height: 27px; }
+  .ig-txt { flex: 1; min-width: 240px; }
+  .ig-txt h2 { font-size: clamp(21px, 2.6vw, 27px); }
+  .ig-txt p { margin: 8px 0 0; color: var(--text-2); font-size: 14.5px; line-height: 1.6; }
+  @media (max-width: 620px) { .ig-box { padding: 24px; } .ig-box .btn { width: 100%; } }
+
   /* rodapé: exatamente o mesmo bloco em todas as páginas do site.
      Se mudar aqui, mudar também em legal.css. */
   footer { border-top: 1px solid var(--border); padding: 40px 0 46px; color: var(--muted); font-size: 13.5px; }
@@ -296,6 +311,8 @@
   .foot-links { display: flex; gap: 20px; align-items: center; justify-content: center; flex-wrap: wrap; }
   footer a { color: var(--text-2); }
   footer a:hover { color: var(--violet); }
+  .foot-ig { display: inline-flex; align-items: center; gap: 7px; }
+  .foot-ig svg { width: 16px; height: 16px; flex: none; }
   .foot-fina { line-height: 1.8; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -320,7 +337,7 @@
       <a href="#pergunte">Pergunte</a>
       <a href="#embreve">Em breve</a>
       <a href="#precos">Preços</a>
-      <a class="btn btn-primary" href="#precos">Começar grátis</a>
+      <a class="btn btn-primary" href="#baixar">Baixar o app</a>
     </div>
   </div>
 </nav>
@@ -333,7 +350,7 @@
       <h1>Da entrevista à aspa pronta, <span class="grad">com prova de cada palavra.</span></h1>
       <p class="lead">Grave, transcreva em português de verdade e receba as melhores falas da sua fonte, com o áudio no segundo exato de cada aspa. E ainda pergunte às suas próprias entrevistas, como um Google particular da sua apuração.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#precos">Começar grátis</a>
+        <a class="btn btn-primary" href="#baixar">Baixar o app</a>
         <a class="btn btn-ghost" href="#pergunte">Ver como funciona</a>
       </div>
 
@@ -684,7 +701,6 @@
           <li>Documentos, fontes e exportar</li>
           <li>O áudio fica no seu aparelho</li>
         </ul>
-        <a class="btn btn-ghost" href="#top">Começar grátis</a>
       </div>
       <div class="plan pro reveal d1">
         <span class="badge">3 dias grátis</span>
@@ -700,10 +716,14 @@
           <li>Sugestão de aspas e revisão à vontade</li>
           <li>Prioridade nas novidades que vêm por aí</li>
         </ul>
-        <a class="btn btn-primary" href="#top">Assinar o Profissional</a>
       </div>
     </div>
-    <p class="muted-s reveal" style="text-align:center;margin-top:22px">A assinatura é feita dentro do aplicativo, pela loja do seu aparelho. Cancele quando quiser.</p>
+    <!-- Nada de botão de assinar aqui: não existe assinatura pela web. A troca de
+         plano acontece dentro do app, pela loja do aparelho. O site só leva ao download. -->
+    <div class="hero-cta reveal" style="justify-content:center;margin-top:34px">
+      <a class="btn btn-primary" href="#baixar">Baixar o app</a>
+    </div>
+    <p class="muted-s reveal" style="text-align:center;margin-top:22px">Os dois planos ficam dentro do aplicativo. A assinatura do Profissional é feita no app, pela loja do seu aparelho, e você cancela quando quiser.</p>
   </div>
 </section>
 
@@ -715,14 +735,41 @@
   </div>
 </section>
 
-<section class="final">
+<section class="final" id="baixar">
   <div class="wrap reveal">
     <span class="eyebrow" style="justify-content:center">Feito de jornalista para jornalista</span>
     <h2 style="margin-top:18px">Sua próxima entrevista <span class="grad">merece o Ressoa.</span></h2>
-    <p class="lead">Grave a primeira hoje e receba a transcrição em português, com a aspa pronta e a prova em áudio.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="#precos">Começar grátis</a>
-      <a class="btn btn-ghost" href="#recursos">Ver os recursos</a>
+    <p class="lead">O Ressoa vive no seu celular: grave a entrevista, receba a transcrição em português e a aspa com a prova em áudio. Tudo acontece dentro do app.</p>
+    <div class="stores center">
+      <span class="store" role="img" aria-label="App Store, em breve">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.53c-.02-2.2 1.8-3.26 1.88-3.31-1.02-1.5-2.62-1.7-3.18-1.72-1.35-.14-2.64.79-3.33.79-.69 0-1.75-.77-2.87-.75-1.48.02-2.84.86-3.6 2.18-1.53 2.66-.39 6.6 1.1 8.76.73 1.06 1.6 2.25 2.74 2.2 1.1-.04 1.52-.71 2.85-.71 1.33 0 1.71.71 2.87.69 1.19-.02 1.94-1.08 2.67-2.14.84-1.23 1.19-2.42 1.2-2.48-.03-.01-2.3-.88-2.33-3.51zM14.9 5.6c.6-.73 1.01-1.75.9-2.76-.87.04-1.92.58-2.55 1.31-.56.65-1.05 1.68-.92 2.67.97.08 1.96-.49 2.57-1.22z"/></svg>
+        <span class="st"><small>Baixar na</small><b>App Store</b></span>
+      </span>
+      <span class="store" role="img" aria-label="Google Play, em breve">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3.6 2.3 13.4 12 3.6 21.7c-.33-.2-.53-.6-.53-1.12V3.42c0-.52.2-.92.53-1.12z" fill="#00D0FF"/>
+          <path d="M17.3 8.2 13.4 12 3.6 2.3c.36-.22.8-.24 1.16-.03L17.3 8.2z" fill="#00F076"/>
+          <path d="M17.3 15.8 4.76 21.73c-.36.21-.8.19-1.16-.03L13.4 12l3.9 3.8z" fill="#FF3A44"/>
+          <path d="m17.3 8.2 3.2 1.9c.83.5.83 1.3 0 1.8l-3.2 1.9L13.4 12l3.9-3.8z" fill="#FFC900"/>
+        </svg>
+        <span class="st"><small>Disponível no</small><b>Google Play</b></span>
+      </span>
+    </div>
+    <div class="stores-note">Em breve nas lojas</div>
+  </div>
+</section>
+
+<section id="instagram" style="padding-top:0">
+  <div class="wrap">
+    <div class="ig-box reveal">
+      <div class="ig-mark">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.25" fill="currentColor"/></svg>
+      </div>
+      <div class="ig-txt">
+        <h2>Siga o Ressoa no Instagram</h2>
+        <p>Bastidores de quem está construindo o app, dicas de apuração e o aviso, em primeira mão, quando o Ressoa chegar à sua loja.</p>
+      </div>
+      <a class="btn btn-primary" href="https://instagram.com/ressoaapp" target="_blank" rel="noopener">Seguir @ressoaapp</a>
     </div>
   </div>
 </section>
@@ -740,6 +787,10 @@
       <a href="exclusao-de-dados.html">Exclusão de dados</a>
       <a href="contato.html">Contato</a>
       <a href="mailto:ressoaapp@rafasbatista.app.br">Suporte</a>
+      <a class="foot-ig" href="https://instagram.com/ressoaapp" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.25" fill="currentColor"/></svg>
+        @ressoaapp
+      </a>
     </div>
     <div class="foot-fina">
       Desenvolvido por Rafael Batista, jornalista goiano.<br>
