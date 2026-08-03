@@ -29,7 +29,7 @@
 <header class="doc">
   <div class="selo">LGPD, Lei 13.709/2018</div>
   <h1>Política de Privacidade</h1>
-  <div class="datas">Versão 1.0, em vigor desde 23 de julho de 2026</div>
+  <div class="datas">Versão 1.1, em vigor desde 2 de agosto de 2026</div>
 </header>
 
 <main>
@@ -82,6 +82,11 @@
           <td data-rotulo="Observação">Sua conta.</td>
         </tr>
         <tr>
+          <td data-rotulo="Informação">Foto de perfil (opcional)</td>
+          <td class="local nuvem" data-rotulo="Onde fica">Na nuvem</td>
+          <td data-rotulo="Observação">Só se você escolher uma. Fica em área privada, visível apenas para você, e some na exclusão da conta.</td>
+        </tr>
+        <tr>
           <td data-rotulo="Informação">Título, tipo, duração e marcadores das gravações</td>
           <td class="local nuvem" data-rotulo="Onde fica">Na nuvem</td>
           <td data-rotulo="Observação">Para você reencontrar o material em qualquer aparelho.</td>
@@ -122,7 +127,7 @@
 
   <h3>Dados de assinatura</h3>
   <p>Se você assinar o plano Profissional, guardamos o identificador da transação, o valor, a situação e a data de validade do plano. <strong>Nunca vemos e nunca guardamos o número do seu cartão, o código de segurança ou a sua senha bancária.</strong></p>
-  <p>Quem processa o pagamento depende de onde você assina: dentro do aplicativo é a <strong>App Store</strong> ou a <strong>Google Play</strong>, e pelo site é o <strong>Mercado Pago</strong>, no Pix. Em nenhum dos casos os dados do meio de pagamento passam por nós.</p>
+  <p>Quem processa o pagamento é a <strong>loja de aplicativos do seu aparelho</strong>, único caminho de venda da assinatura. Os dados do seu meio de pagamento não passam por nós em momento nenhum.</p>
 
   <h3>O que não coletamos</h3>
   <ul>
@@ -170,7 +175,7 @@
     <li>Assim que a transcrição volta, <strong>o servidor apaga o arquivo temporário</strong>. O que fica salvo é o texto.</li>
   </ol>
   <p>Se você assina o plano Profissional, pode ativar o <strong>backup do áudio</strong>. Nesse caso, e só nesse caso, o arquivo passa a ficar guardado em um espaço privado, isolado por conta, ao qual apenas você tem acesso. É uma escolha sua, feita gravação a gravação, e você pode remover o backup quando quiser.</p>
-  <p>A transcrição ao vivo, quando disponível no seu aparelho, usa o mecanismo de reconhecimento de fala do próprio sistema operacional (Apple ou Google). Nesse modo, o processamento segue as regras de privacidade do fabricante do seu celular.</p>
+  <p>A transcrição ao vivo, quando disponível no seu aparelho, usa o mecanismo de reconhecimento de fala do próprio sistema operacional do celular. Nesse modo, o processamento segue as regras de privacidade do fabricante do aparelho.</p>
 </section>
 
 <section class="item">
@@ -206,19 +211,14 @@
           <td data-rotulo="O que recebe">O áudio ou a imagem, no momento do processamento. Servidores nos Estados Unidos.</td>
         </tr>
         <tr>
-          <td data-rotulo="Fornecedor"><strong>Apple e Google</strong></td>
+          <td data-rotulo="Fornecedor"><strong>Loja de aplicativos</strong></td>
           <td data-rotulo="Para quê">Distribuição do aplicativo e cobrança da assinatura feita dentro dele</td>
-          <td data-rotulo="O que recebe">Dados da sua conta na loja e da transação, conforme a política de cada uma.</td>
+          <td data-rotulo="O que recebe">Dados da sua conta na loja e da transação, conforme a política da própria loja.</td>
         </tr>
         <tr>
           <td data-rotulo="Fornecedor"><strong>RevenueCat</strong></td>
           <td data-rotulo="Para quê">Confirmar com as lojas que a assinatura é válida</td>
           <td data-rotulo="O que recebe">Seu identificador de conta e a situação da assinatura. Nenhum conteúdo seu.</td>
-        </tr>
-        <tr>
-          <td data-rotulo="Fornecedor"><strong>Mercado Pago</strong></td>
-          <td data-rotulo="Para quê">Cobrança do Pix, quando a assinatura é feita pelo site</td>
-          <td data-rotulo="O que recebe">Dados da transação. Os dados de pagamento vão direto para eles, sem passar por nós.</td>
         </tr>
       </tbody>
     </table>
@@ -310,13 +310,21 @@
 
 <footer>
   <div class="wrap foot-in">
-    <span>Ressoa, um app independente de Rafael Batista, jornalista goiano.</span>
+    <div class="foot-marca">
+      <svg class="eco" viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="24" r="4.5" fill="currentColor"/><path d="M23 15a12 12 0 0 1 0 18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M29 9a20 20 0 0 1 0 30" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/></svg>
+      <span><span class="r">R</span>essoa</span>
+    </div>
     <div class="foot-links">
       <a href="/">Início</a>
+      <a href="privacidade.html">Política de Privacidade</a>
       <a href="termos.html">Termos de Uso</a>
-      <a href="exclusao-de-dados.html">Excluir conta</a>
+      <a href="exclusao-de-dados.html">Exclusão de dados</a>
       <a href="contato.html">Contato</a>
-      <span>© 2026</span>
+      <a href="mailto:ressoaapp@rafasbatista.app.br">Suporte</a>
+    </div>
+    <div class="foot-fina">
+      Desenvolvido por Rafael Batista, jornalista goiano.<br>
+      © 2026 Ressoa · ressoaapp.rafasbatista.app.br · Aqui, quem escreve é você.
     </div>
   </div>
 </footer>

@@ -286,12 +286,17 @@
   .final .lead { margin: 20px auto 0; }
   .final .hero-cta { justify-content: center; }
 
-  /* footer */
-  footer { border-top: 1px solid var(--border); padding: 40px 0; color: var(--muted); font-size: 13.5px; }
-  .foot-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-  .foot-links { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+  /* rodapé: exatamente o mesmo bloco em todas as páginas do site.
+     Se mudar aqui, mudar também em legal.css. */
+  footer { border-top: 1px solid var(--border); padding: 40px 0 46px; color: var(--muted); font-size: 13.5px; }
+  .foot-in { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+  .foot-marca { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 19px; color: var(--text); }
+  .foot-marca .r { font-size: 1.24em; line-height: 1; }
+  .foot-marca .eco { width: 26px; height: 26px; color: var(--violet); flex: none; }
+  .foot-links { display: flex; gap: 20px; align-items: center; justify-content: center; flex-wrap: wrap; }
   footer a { color: var(--text-2); }
   footer a:hover { color: var(--violet); }
+  .foot-fina { line-height: 1.8; }
 
   @media (prefers-reduced-motion: reduce) {
     * { scroll-behavior: auto !important; }
@@ -696,7 +701,7 @@
         <a class="btn btn-primary" href="#top">Assinar o Profissional</a>
       </div>
     </div>
-    <p class="muted-s reveal" style="text-align:center;margin-top:22px">Pagamento no Pix ou cartão, via Mercado Pago. Cancele quando quiser.</p>
+    <p class="muted-s reveal" style="text-align:center;margin-top:22px">A assinatura é feita dentro do aplicativo, pela loja do seu aparelho. Cancele quando quiser.</p>
   </div>
 </section>
 
@@ -722,17 +727,21 @@
 
 <footer>
   <div class="wrap foot-in">
-    <div style="display:flex;align-items:center;gap:11px">
+    <div class="foot-marca">
       <svg class="eco" viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="24" r="4.5" fill="currentColor"/><path d="M23 15a12 12 0 0 1 0 18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M29 9a20 20 0 0 1 0 30" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/></svg>
-      <span>Ressoa, um app independente de Rafael Batista, jornalista goiano.</span>
+      <span><span class="r">R</span>essoa</span>
     </div>
     <div class="foot-links">
-      <a href="#precos">Preços</a>
-      <a href="privacidade.html">Privacidade</a>
+      <a href="/">Início</a>
+      <a href="privacidade.html">Política de Privacidade</a>
       <a href="termos.html">Termos de Uso</a>
-      <a href="exclusao-de-dados.html">Excluir conta</a>
+      <a href="exclusao-de-dados.html">Exclusão de dados</a>
       <a href="contato.html">Contato</a>
-      <span>© 2026</span>
+      <a href="mailto:ressoaapp@rafasbatista.app.br">Suporte</a>
+    </div>
+    <div class="foot-fina">
+      Desenvolvido por Rafael Batista, jornalista goiano.<br>
+      © 2026 Ressoa · ressoaapp.rafasbatista.app.br · Aqui, quem escreve é você.
     </div>
   </div>
 </footer>

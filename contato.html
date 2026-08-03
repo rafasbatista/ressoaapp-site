@@ -62,7 +62,9 @@
     </a>
     <a class="assunto" href="mailto:ressoaapp@rafasbatista.app.br?subject=Pedido%20de%20exclus%C3%A3o%20de%20conta">
       <b>Excluir minha conta</b>
-      <span>Dá para fazer sozinho dentro do app. O passo a passo está <a href="exclusao-de-dados.html">nesta página</a>.</span>
+      <!-- Sem link aqui dentro: âncora dentro de âncora quebra o cartão.
+           O caminho para a página de exclusão está no topo e no rodapé. -->
+      <span>Dá para fazer sozinho dentro do app, em Perfil. Se preferir, peça por aqui.</span>
     </a>
     <a class="assunto" href="mailto:ressoaapp@rafasbatista.app.br?subject=Imprensa%20ou%20parceria">
       <b>Imprensa e parcerias</b>
@@ -98,13 +100,21 @@
 
 <footer>
   <div class="wrap foot-in">
-    <span>Ressoa, um app independente de Rafael Batista, jornalista goiano.</span>
+    <div class="foot-marca">
+      <svg class="eco" viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="24" r="4.5" fill="currentColor"/><path d="M23 15a12 12 0 0 1 0 18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M29 9a20 20 0 0 1 0 30" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/></svg>
+      <span><span class="r">R</span>essoa</span>
+    </div>
     <div class="foot-links">
       <a href="/">Início</a>
-      <a href="privacidade.html">Privacidade</a>
+      <a href="privacidade.html">Política de Privacidade</a>
       <a href="termos.html">Termos de Uso</a>
-      <a href="exclusao-de-dados.html">Excluir conta</a>
-      <span>© 2026</span>
+      <a href="exclusao-de-dados.html">Exclusão de dados</a>
+      <a href="contato.html">Contato</a>
+      <a href="mailto:ressoaapp@rafasbatista.app.br">Suporte</a>
+    </div>
+    <div class="foot-fina">
+      Desenvolvido por Rafael Batista, jornalista goiano.<br>
+      © 2026 Ressoa · ressoaapp.rafasbatista.app.br · Aqui, quem escreve é você.
     </div>
   </div>
 </footer>
