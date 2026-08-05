@@ -29,7 +29,7 @@
 <header class="doc">
   <div class="selo">LGPD, Lei 13.709/2018</div>
   <h1>Política de Privacidade</h1>
-  <div class="datas">Versão 1.1, em vigor desde 2 de agosto de 2026</div>
+  <div class="datas">Versão 1.2, em vigor desde 5 de agosto de 2026</div>
 </header>
 
 <main>
@@ -220,6 +220,11 @@
           <td data-rotulo="Para quê">Confirmar com as lojas que a assinatura é válida</td>
           <td data-rotulo="O que recebe">Seu identificador de conta e a situação da assinatura. Nenhum conteúdo seu.</td>
         </tr>
+        <tr>
+          <td data-rotulo="Fornecedor"><strong>Have I Been Pwned</strong></td>
+          <td data-rotulo="Para quê">Avisar quando a senha escolhida já apareceu em vazamentos públicos</td>
+          <td data-rotulo="O que recebe">Cinco caracteres do resumo criptográfico da senha. Não recebe a senha, não recebe o seu e-mail e não recebe nada que identifique você.</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -249,6 +254,7 @@
     <li>O espaço de armazenamento de áudio é privado. Não existe link público, apenas links assinados e de vida curta.</li>
     <li>As chaves dos serviços externos ficam no servidor. Elas nunca são embarcadas no aplicativo que você instala.</li>
     <li>Senhas passam por algoritmo de hash irreversível.</li>
+    <li>Ao criar ou trocar a senha, o aplicativo verifica se ela já apareceu em vazamentos públicos conhecidos, consultando o serviço Have I Been Pwned. <strong>A sua senha não é enviada.</strong> O aplicativo calcula um resumo criptográfico dela e envia apenas os cinco primeiros caracteres desse resumo, recebe de volta uma lista com centenas de resumos que começam igual, e faz a comparação dentro do seu aparelho. O serviço consultado não tem como saber qual senha foi verificada, nem quem verificou.</li>
   </ul>
   <p>Nenhum sistema é infalível. Se acontecer um incidente de segurança com risco relevante a você, comunicaremos você e a Autoridade Nacional de Proteção de Dados, como manda o art. 48 da LGPD.</p>
 </section>
