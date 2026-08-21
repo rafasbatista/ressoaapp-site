@@ -15,6 +15,7 @@
 
 import { writeFileSync } from 'node:fs';
 import { JORNADAS, PAGINAS } from './conteudo.mjs';
+import { rodapeDaHome } from './rodape.mjs';
 
 const SITE = 'https://ressoaapp.rafasbatista.app.br';
 
@@ -79,32 +80,7 @@ function trilha(atual) {
 
 function rodape() {
   return `
-<footer>
-  <div class="wrap foot-in">
-    <div class="foot-marca">
-      ${MARCA_SVG}
-      <span><span class="r">R</span>essoa</span>
-    </div>
-    <div class="foot-links">
-      <a href="/">Início</a>
-      <a href="como-funciona.html">Como funciona</a>
-      <a href="o-que-nao-faz.html">O que não faz</a>
-      <a href="privacidade-simples.html">Privacidade em português</a>
-      <a href="privacidade.html">Política de Privacidade</a>
-      <a href="termos.html">Termos de Uso</a>
-      <a href="exclusao-de-dados.html">Exclusão de dados</a>
-      <a href="contato.html">Contato</a>
-      <a class="foot-ig" href="https://instagram.com/ressoaapp" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.25" fill="currentColor"/></svg>
-        @ressoaapp
-      </a>
-    </div>
-    <div class="foot-fina">
-      Desenvolvido por <a href="https://rafasbatista.app.br/" target="_blank" rel="noopener">Rafael Batista</a>, jornalista goiano.<br>
-      © 2026 Ressoa · ressoaapp.rafasbatista.app.br · Aqui, quem escreve é você.
-    </div>
-  </div>
-</footer>
+${rodapeDaHome()}
 </body>
 </html>
 `;
