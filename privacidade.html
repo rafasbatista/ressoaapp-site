@@ -29,7 +29,7 @@
 <header class="doc">
   <div class="selo">LGPD, Lei 13.709/2018</div>
   <h1>Política de Privacidade</h1>
-  <div class="datas">Versão 1.3, em vigor desde 5 de agosto de 2026</div>
+  <div class="datas">Versão 1.4, em vigor desde 20 de agosto de 2026</div>
 </header>
 
 <main>
@@ -107,6 +107,26 @@
           <td data-rotulo="Observação">Nome, cargo, veículo, telefone, e-mail e anotações que você digitar.</td>
         </tr>
         <tr>
+          <td data-rotulo="Informação">Pautas preparadas</td>
+          <td class="local nuvem" data-rotulo="Onde fica">Na nuvem</td>
+          <td data-rotulo="Observação">O texto que você colou, o dossiê, a colinha e as suas marcações. Sincroniza para você abrir em outro aparelho.</td>
+        </tr>
+        <tr>
+          <td data-rotulo="Informação">Promessas guardadas</td>
+          <td class="local nuvem" data-rotulo="Onde fica">Na nuvem</td>
+          <td data-rotulo="Observação">A fala citada, quem disse, o prazo e a gravação de origem. O prazo vale meses, e por isso ela acompanha a troca de aparelho.</td>
+        </tr>
+        <tr>
+          <td data-rotulo="Informação">Redação e convites, se você criar uma</td>
+          <td class="local nuvem" data-rotulo="Onde fica">Na nuvem</td>
+          <td data-rotulo="Observação">Nome da equipe, quem participa e os e-mails que você convidou.</td>
+        </tr>
+        <tr>
+          <td data-rotulo="Informação">Ata da coletiva, espelho de TV, conferência da pauta e avisos do acervo</td>
+          <td class="local" data-rotulo="Onde fica">No aparelho</td>
+          <td data-rotulo="Observação">São análises do material que já está sincronizado, e podem ser refeitas em qualquer aparelho.</td>
+        </tr>
+        <tr>
           <td data-rotulo="Informação">Plano, minutos usados e histórico de pagamentos</td>
           <td class="local nuvem" data-rotulo="Onde fica">Na nuvem</td>
           <td data-rotulo="Observação">Sem nenhum dado de cartão.</td>
@@ -123,17 +143,27 @@
   <p>Seu nome, e-mail e, se você quiser preencher, o veículo em que trabalha. O e-mail é obrigatório porque é a sua chave de acesso e o caminho para recuperar a senha. Sua senha é guardada de forma criptografada e irreversível, ninguém consegue lê-la, nem o desenvolvedor.</p>
 
   <h3>Conteúdo que você cria</h3>
-  <p>Gravações, transcrições, aspas marcadas, marcadores de momento, roteiros de pergunta, documentos lidos e fontes cadastradas. Esse conteúdo é <strong>seu</strong>. Nós o tratamos apenas para fazer o aplicativo funcionar para você.</p>
+  <p>Gravações, transcrições, aspas marcadas, momentos marcados durante a gravação, roteiros de pergunta, pautas preparadas com as suas marcações, promessas guardadas para cobrar, documentos lidos e fontes cadastradas. Esse conteúdo é <strong>seu</strong>. Nós o tratamos apenas para fazer o aplicativo funcionar para você.</p>
 
   <h3>Dados de assinatura</h3>
   <p>Se você assinar o plano Profissional, guardamos o identificador da transação, o valor, a situação e a data de validade do plano. <strong>Nunca vemos e nunca guardamos o número do seu cartão, o código de segurança ou a sua senha bancária.</strong></p>
   <p>Quem processa o pagamento é a <strong>loja de aplicativos do seu aparelho</strong>, único caminho de venda da assinatura. Os dados do seu meio de pagamento não passam por nós em momento nenhum.</p>
 
+  <h3>Permissões que o aplicativo pede</h3>
+  <p>Cada uma é pedida no momento em que serve, nunca na abertura do aplicativo, e o Ressoa continua funcionando se você negar qualquer uma delas.</p>
+  <ul>
+    <li><strong>Microfone:</strong> para gravar entrevistas. Sem ela não há gravação.</li>
+    <li><strong>Câmera e fotos:</strong> só para fotografar ou escolher a imagem de um documento.</li>
+    <li><strong>Contatos:</strong> só quando você toca em trazer uma fonte da agenda. O sistema abre o seletor, e o aplicativo recebe apenas o contato escolhido.</li>
+    <li><strong>Notificações:</strong> para avisar quando uma promessa que você guardou está para vencer. O aviso é montado e disparado <strong>dentro do seu aparelho</strong>, sem passar por servidor nenhum, e o conteúdo dele não sai daí.</li>
+  </ul>
+
   <h3>O que não coletamos</h3>
   <ul>
     <li>Não usamos ferramentas de análise de comportamento, nem SDK de publicidade, nem pixel de rastreamento.</li>
     <li>Não coletamos sua localização.</li>
-    <li>Não acessamos sua agenda de contatos do celular, suas fotos além das que você escolhe anexar, nem qualquer outro aplicativo.</li>
+    <li>Não lemos a sua agenda de contatos. Existe um botão que abre o seletor de contatos do próprio sistema, e o aplicativo recebe apenas o contato que você escolher ali, para preencher uma ficha de fonte. Nenhum outro contato é lido, e nada é enviado sem você salvar a ficha.</li>
+    <li>Não acessamos suas fotos além das que você escolhe anexar, nem qualquer outro aplicativo.</li>
     <li>Não montamos perfil comercial seu e não fazemos decisão automatizada que afete você.</li>
   </ul>
 </section>
@@ -185,7 +215,22 @@
 
 <section class="item">
   <h2><span class="n">08</span> Inteligência artificial</h2>
-  <p>O Ressoa usa IA para quatro coisas: transcrever áudio, ler documentos, sugerir quais falas viram aspas e apontar palavras de baixa confiança para você conferir. Também gera representações matemáticas dos trechos, para a busca por sentido funcionar.</p>
+  <p>O Ressoa usa IA nestes pontos, e em nenhum outro:</p>
+  <ul>
+    <li>Transcrever o áudio das suas gravações.</li>
+    <li>Ler o texto e os dados de um documento fotografado.</li>
+    <li>Apontar palavras de baixa confiança na transcrição, para você conferir.</li>
+    <li>Sugerir quais falas poderiam virar aspas.</li>
+    <li>Preparar uma pauta a partir do texto que você colar.</li>
+    <li>Apontar, numa gravação, o que é notícia e o que se sustenta como sonora.</li>
+    <li>Montar a ata de uma coletiva e o espelho de um pacote de TV.</li>
+    <li>Identificar quais falas com data são compromissos que dá para cobrar depois.</li>
+    <li>Comparar o que você preparou com o que foi de fato perguntado na entrevista.</li>
+    <li>Comparar falas da mesma fonte em datas diferentes, à procura de contradição.</li>
+    <li>Apontar trechos que ainda identificariam uma fonte protegida, mesmo sem o nome.</li>
+    <li>Gerar representações matemáticas dos trechos, para a busca por sentido funcionar.</li>
+  </ul>
+  <p>Em todos eles, o que a IA recebe é o áudio, a imagem ou o <strong>texto já transcrito</strong> do material envolvido, apenas no momento do processamento.</p>
   <div class="nota">
     <p><strong>Regra inegociável do produto: o Ressoa não escreve matéria.</strong> A IA aqui só extrai e organiza o que já foi dito. Ela não redige texto jornalístico, não completa frase que você não falou e não inventa palavra. Quando não há hipótese confiável para um trecho, a transcrição marca como inaudível, e nada é aplicado no seu texto sem o seu aceite.</p>
   </div>
@@ -207,8 +252,8 @@
         </tr>
         <tr>
           <td data-rotulo="Fornecedor"><strong>Groq</strong></td>
-          <td data-rotulo="Para quê">Transcrição, leitura de documentos e organização de aspas</td>
-          <td data-rotulo="O que recebe">O áudio ou a imagem, no momento do processamento. Servidores nos Estados Unidos.</td>
+          <td data-rotulo="Para quê">Transcrição, leitura de documentos e as análises listadas no item 08</td>
+          <td data-rotulo="O que recebe">O áudio, a imagem ou o trecho de transcrição envolvido, apenas no momento do processamento. Servidores nos Estados Unidos.</td>
         </tr>
         <tr>
           <td data-rotulo="Fornecedor"><strong>Loja de aplicativos</strong></td>
@@ -233,6 +278,12 @@
       </tbody>
     </table>
   </div>
+  <h3>Quando você compartilha com o seu time</h3>
+  <p>Se você criar uma <strong>redação</strong> e convidar pessoas, elas passam a enxergar as <strong>pautas que você marcar como compartilhadas</strong>, com o dossiê e a colinha. Isso acontece por ação sua, pauta a pauta, e você desfaz do mesmo jeito.</p>
+  <p>O que o time <strong>não</strong> enxerga, e não há como mudar: o áudio, as transcrições, as aspas, os momentos marcados, as promessas, os documentos e a agenda de fontes de qualquer participante. Quem falou com você não falou com a redação inteira.</p>
+  <p>Ao convidar alguém, você informa o e-mail dessa pessoa, e nós o guardamos até o convite ser aceito ou cancelado. Esse e-mail é dado pessoal de terceiro, então convide apenas quem espera ser convidado. O Ressoa não envia mensagem para o endereço convidado: quem avisa a pessoa é você.</p>
+  <p>Se quem criou a redação apagar a conta, a redação inteira deixa de existir para todo mundo, junto com as pautas que essa pessoa havia compartilhado.</p>
+
   <p>Também podemos compartilhar dados diante de ordem judicial ou requisição de autoridade competente. Se isso acontecer, e se a lei permitir avisar, avisaremos você.</p>
 </section>
 
@@ -327,6 +378,8 @@
     </div>
     <div class="foot-links">
       <a href="/">Início</a>
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="privacidade-simples.html">Privacidade em português</a>
       <a href="privacidade.html">Política de Privacidade</a>
       <a href="termos.html">Termos de Uso</a>
       <a href="exclusao-de-dados.html">Exclusão de dados</a>
@@ -338,7 +391,7 @@
       </a>
     </div>
     <div class="foot-fina">
-      Desenvolvido por Rafael Batista, jornalista goiano.<br>
+      Desenvolvido por <a href="https://rafasbatista.app.br/" target="_blank" rel="noopener">Rafael Batista</a>, jornalista goiano.<br>
       © 2026 Ressoa · ressoaapp.rafasbatista.app.br · Aqui, quem escreve é você.
     </div>
   </div>
